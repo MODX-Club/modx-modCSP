@@ -3,7 +3,7 @@
 $pkgNameLower = $options['namespace'];
 
 $mimp_get_field_position = function ($field_position) {
-  return $field_position == 'first' ? array('first' => true) : array('after' => $field_position);
+    return $field_position == 'first' ? array('first' => true) : array('after' => $field_position);
 };
 
 $mimp_update_fields = function ($modx, $class_name) use ($mimp_get_field_position) {
@@ -12,6 +12,11 @@ $mimp_update_fields = function ($modx, $class_name) use ($mimp_get_field_positio
     $fields_at_meta = $modx->getFields($class_name);
     $table_name = $modx->getTableName($class_name);
     $manager = $modx->getManager();
+    
+    if(!$modx->query("SHOW TABLES LIKE '{$table_name}'")->rowCount()){
+        $manager->createObjectContainer($class_name);
+    }
+    
     foreach ($modx->query("SHOW FIELDS IN {$table_name}") as $row) {
         $_field = $row['Field'];
         if (array_key_exists($_field, $fields_at_meta)) {
@@ -60,22 +65,22 @@ if ($object->xpdo) {
     if ($modx instanceof modX) {
         $modelPath = $modx->getOption("{$pkgNameLower}.core_path", null, $modx->getOption('core_path')."components/{$pkgNameLower}/").'model/';
         $modx->setLogLevel(modX::LOG_LEVEL_ERROR);
-        $modx->addPackage($pkgNameLower, $modelPath);
+
         $manager = $modx->getManager();
     }
 
     switch ($options[xPDOTransport::PACKAGE_ACTION]) {
-    case xPDOTransport::ACTION_INSTALL:
-        if ($modx instanceof modX) {
-            // adding xpdo objects
-            $objects = array();
-            foreach ($objects as $o) {
-                $manager->createObjectContainer($o);
-            }
+        case xPDOTransport::ACTION_INSTALL:
+            if ($modx instanceof modX) {
+                // adding xpdo objects
+                $objects = array();
+                foreach ($objects as $o) {
+                    $manager->createObjectContainer($o);
+                }
 
-            $modx->setLogLevel(modX::LOG_LEVEL_INFO);
-            $modx->log(xPDO::LOG_LEVEL_INFO, 'Tables were added');
-        }
+                $modx->setLogLevel(modX::LOG_LEVEL_INFO);
+                $modx->log(xPDO::LOG_LEVEL_INFO, 'Tables were added');
+            }
         break;
     case xPDOTransport::ACTION_UPGRADE:
         if ($modx instanceof modX) {
@@ -88,8 +93,8 @@ if ($object->xpdo) {
             $modx->setLogLevel(modX::LOG_LEVEL_INFO);
             $modx->log(xPDO::LOG_LEVEL_INFO, 'Tables were upgraded');
         }
-        break;
-  }
+    break;
+}
 }
 
 return true;
