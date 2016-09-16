@@ -68,7 +68,7 @@ include_once $sources['builder_includes'].'namespace.php';
 /*
  * Create Category
  */
-// include_once $sources['builder_includes'].'category.php';
+include_once $sources['builder_includes'].'category.php';
 
 /* add plugins */
 // include_once $sources['builder_includes'].'plugins.php';
@@ -82,8 +82,8 @@ include_once $sources['builder_includes'].'namespace.php';
 /*
  * Create category vehicle
  */
-// include_once $sources['builder_includes'].'category.attributes.php';
-// $vehicle = $builder->createVehicle($category, $attr);
+include_once $sources['builder_includes'].'category.attributes.php';
+$vehicle = $builder->createVehicle($category, $attr);
 // eof Create Category
 
 /*
@@ -96,13 +96,14 @@ include_once $sources['resolvers'].'resolver.sources.php';
  */
 // init
 include_once $sources['builder_includes'].'resolver.register.initialize.php';
+// eof adding resolvers
 
 // // resolve tables
 // include_once $sources['builder_includes'].'resolver.tables.wrapper.php';
 
-// register package
+// // register package
 // include_once $sources['builder_includes'].'resolver.register.wrapper.php';
-// eof adding resolvers
+// // eof adding resolvers
 
 $builder->putVehicle($vehicle);
 
